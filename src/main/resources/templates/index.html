@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		
+		<title th:text="${title}"></title>
+
+		<link rel="stylesheet" href="/webjars/roboto-fontface/css/roboto/roboto-fontface.css">
+		<link rel="stylesheet" href="/webjars/normalize.css/normalize.css">
+		<link rel="stylesheet" href="/webjars/github-com-milligram-milligram/milligram.css">
+
+		<script src="/webjars/htmx.org/dist/htmx.js" defer></script>
+		
+		<style>
+			html {
+				overflow-y: scroll;
+			}
+			
+			.column {
+				margin: 12px;
+			}
+
+			.column.choice {
+				border: 2px solid #9B4DCA;
+				background-color: #F4F5F6;
+			}
+			
+			.column.choice.selected {
+				background-color: transparent;
+			}
+
+			label.option {
+				display: inline;
+			}
+			
+			input.option {
+				margin-bottom: 0px;
+			}
+			
+			.option-id {
+				font-weight: bold;
+			}
+			
+			.contradiction {
+				color: red;
+			}
+		</style>
+	</head>
+	<body hx-push-url="true">
+		<main class="wrapper" hx-target="main.wrapper" hx-select="main.wrapper" hx-include="#choice-form" hx-swap="outerHTML">
+			<section class="container">
+				<h1><a href="/" th:text="${title}"></a></h1>
+				
+				<form id="choice-form">
+					<th:block th:each="choicesRow : ${choicesRows}">
+						<div class="row">
+							<th:block th:each="choice : ${choicesRow}">
+								
+								<div class="column choice" th:if="${choice != null}"
+										th:classappend="${isSelected.apply(choice.a) || isSelected.apply(choice.b)} ? 'selected'">
+									<input type="radio" th:id="${optionIdGetter.apply(choice.a)}"
+											th:value="${optionIdGetter.apply(choice.a)}"
+											th:name="${choiceIdGetter.apply(choice)}" class="option"
+											th:checked="${isSelected.apply(choice.a)}" hx-get="/">
+									<label th:for="${optionIdGetter.apply(choice.a)}" 
+											th:text="${choice.a.id.key + ' ' + choice.a.title}" class="option"></label>
+											<div>or</div>
+									<input type="radio" th:id="${optionIdGetter.apply(choice.b)}"
+											th:value="${optionIdGetter.apply(choice.b)}"
+											th:name="${choiceIdGetter.apply(choice)}" class="option"
+											th:checked="${isSelected.apply(choice.b)}" hx-get="/">
+									<label th:for="${optionIdGetter.apply(choice.b)}" 
+											th:text="${choice.b.id.key + ' ' + choice.b.title}" class="option"></label>
+								</div>
+								<div class="column empty-choice" th:if="${choice == null}">&nbsp;</div>
+							</th:block>
+						</div>
+					</th:block>
+				</form>
+
+				<div>
+					<th:block th:if="${!result.contradictions.isEmpty()}">
+						<h4>Contradictions</h4>
+						<ul>
+							<th:block th:each="contradiction : ${result.contradictions}">
+								<li class="contradiction">
+									<span class="option-id" th:text="${contradiction.a.key}"/> contradicts <span 
+											class="option-id" th:text="${contradiction.b.key}"></span>
+								</li>
+							</th:block>
+						</ul>
+					</th:block>
+
+					<h4>Prerequisites</h4>
+					<ul>
+						<th:block th:each="optionPrerequisite : ${optionPrerequisitesSorter.apply(result.optionPrerequisites)}">
+							<li>
+								<span class="option-id" th:text="${optionPrerequisite.option.key}">
+								</span> <span th:text="${optionPrerequisite.prerequisite.text}"></span>
+							</li>
+						</th:block>
+					</ul>
+
+					<h4>Pros</h4>
+					<ul>
+						<th:block th:each="optionArgument : ${optionArgumentsSorter.apply(result.optionArguments)}">
+							<li th:if="${proArgumentChecker.apply(optionArgument.argument)}">
+								<span class="option-id" th:text="${optionArgument.option.key}">
+								</span> <span th:text="${optionArgument.argument.text}"></span>
+							</li>
+						</th:block>
+					</ul>
+
+					<h4>Cons</h4>
+					<ul>
+						<th:block th:each="optionArgument : ${optionArgumentsSorter.apply(result.optionArguments)}">
+							<li th:if="${!proArgumentChecker.apply(optionArgument.argument)}">
+								<span class="option-id" th:text="${optionArgument.option.key}">
+								</span> <span th:text="${optionArgument.argument.text}"></span>
+							</li>
+						</th:block>
+					</ul>
+				</div>
+			</section>
+		</main>
+	</body>
+</html>

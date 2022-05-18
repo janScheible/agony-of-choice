@@ -1,0 +1,37 @@
+title
+# comment
+[OPT1] option 1
+-- prerequisites
+--- prereq 1.1
+--- prereq 1.2
+-- contradicts: {[OPT4]}
+-- pros
+--- pro 1.1
+-- cons
+--- con 1.1
+--- {[OPT3]} con 1.2
+
+[OPT2] option 2
+-- prerequisites
+-- contradicts:
+-- pros
+-- cons
+
+
+
+
+[OPT3] option 3
+-- prerequisites
+-- contradicts: {}
+-- pros
+-- cons
+
+[OPT4] option 4
+-- prerequisites
+-- contradicts:
+-- pros
+--- pro 4.1
+-- cons
+--- con 4.1
+
+# comment at end of file

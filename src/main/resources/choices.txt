@@ -1,0 +1,62 @@
+Software architecture trade-offs
+
+[ARCH1] microservices
+-- prerequisites
+--- team with DevOps experience
+-- contradicts
+-- pros
+--- independent deployments
+-- cons
+--- operational complexity
+[ARCH2] monolith
+-- prerequisites
+-- contradicts
+-- pros
+--- easier to manage and understand
+-- cons
+--- hard to scale (in terms of team members and requests)
+
+[ARCH3] usage of a SPA framework
+-- prerequisites
+-- contradicts
+-- pros
+--- modern, responsive applications
+-- cons
+--- huge SPA framework vendor-lock in
+[ARCH4] server-rendered HTML templates
+-- prerequisites
+-- contradicts
+-- pros
+--- strong, server-side logic
+-- cons
+--- huge pieces of HTML have to be transported over the wire
+
+[ARCH5] strongly typed backend language
+-- prerequisites
+-- contradicts
+-- pros
+--- compiler allows to find errors early
+-- cons
+--- long build times
+[ARCH6] dynamically typed backend language
+-- prerequisites
+-- contradicts
+-- pros
+--- fast turn-around cycles
+-- cons
+--- errors might occur at runtime
+
+[ARCH7] infrastructure as code
+-- prerequisites
+-- contradicts
+-- pros
+--- easy to re-create the whole environment
+-- cons
+--- effort to create it
+[ARCH8] manual setup in Cloud provider's UI
+-- prerequisites
+-- contradicts: {[ARCH1]}
+-- pros
+--- fast for simple environments
+-- cons
+--- prone to error for example when creating a new stage
